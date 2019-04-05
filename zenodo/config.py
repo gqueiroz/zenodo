@@ -344,7 +344,7 @@ GITHUB_RECORD_SERIALIZER = 'zenodo.modules.records.serializers.githubjson_v1'
 GITHUB_REFRESH_TIMEDELTA = timedelta(hours=3)
 #: GitHub webhook url override
 GITHUB_WEBHOOK_RECEIVER_URL = \
-    'http://localhost:5000' \
+    'https://35.181.62.113' \
     '/api/hooks/receivers/github/events/?access_token={token}'
 #: Set Zenodo deposit class
 GITHUB_RELEASE_CLASS = 'zenodo.modules.github.api:ZenodoGitHubRelease'
@@ -1146,13 +1146,13 @@ COMMUNITIES_REQUEST_EMAIL_SENDER = SUPPORT_EMAIL
 # Theme
 # =====
 #: Default site name.
-THEME_SITENAME = _("Zenodo")
+THEME_SITENAME = _("GEO Knowledge Hub")
 #: Default site URL (used only when not in a context - e.g. like celery tasks).
-THEME_SITEURL = "http://localhost:5000"
+THEME_SITEURL = "https://35.181.62.113"
 #: Endpoint for breadcrumb root.
 THEME_BREADCRUMB_ROOT_ENDPOINT = 'zenodo_frontpage.index'
 #: Twitter handle.
-THEME_TWITTERHANDLE = "@zenodo_org"
+THEME_TWITTERHANDLE = "@geosec2025"
 #: Path to logo file.
 THEME_LOGO = "img/zenodo.svg"
 #: Google Site Verification ids.
