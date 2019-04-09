@@ -46,8 +46,11 @@
 }
 
 .navbar-default {
-  @include navbar-gradient();
+  //@include navbar-gradient();
   @include navbar-shadow();
+
+  //background-image: linear-gradient(to top right, #87aee4, #143240);
+  background-color: #143240;
 
   // Header background image
   // .container {
