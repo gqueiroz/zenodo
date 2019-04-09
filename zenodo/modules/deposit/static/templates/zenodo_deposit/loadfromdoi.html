@@ -1,0 +1,27 @@
+<div class="form-group {{form.htmlClass}}"
+     ng-controller="DoiSearcherController as $ctrl">
+  <div>
+    <div
+      class="tooltip-wrapper"
+      bs-tooltip
+      data-container="div"
+      data-title="{{ 'Search for a Digital Object Identifier.' }}"
+      data-placement="right"
+      ng-class="{'disabled': model.doi}"
+    >
+      <button
+        sf-field-model="replaceAll"
+        class="btn btn-xs btn-default form-button {{ form.fieldHtmlClass }}"
+        ng-click="$ctrl.onChangeTrigger($event, model)"
+        ng-disabled="!(model.doi && model.doi != model.prereserve_doi.doi) || $ctrl.isLoading"
+      >
+        <i class="fa" ng-class="{'fa-search': !$ctrl.isLoading, 'fa-spinner fa-spin': $ctrl.isLoading }"></i> Search
+      </button>
+    </div>
+    <div
+      class="help-block"
+      ng-show="(hasError() && errorMessage(schemaError())) || form.description"
+      ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description">
+    </div>
+  </div>
+</div>

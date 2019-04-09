@@ -193,7 +193,12 @@
       {
         "type": "template",
         "key": "prereserve_doi.doi",
+        "htmlClass": "col-md-2 col-md-offset-3 col-xs-4 col-xs-offset-2",
         "templateUrl": "/static/templates/zenodo_deposit/prereserve_doi.html"
+      },
+      {
+        "type": "template",
+        "templateUrl": "/static/templates/zenodo_deposit/loadfromdoi.html"
       },
       {
         "type": "template",

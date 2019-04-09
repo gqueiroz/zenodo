@@ -62,6 +62,213 @@ invenioDynamicSelectController.$inject = [
   '$scope',
   '$controller',
 ];
+/**
+ * Retrieves DOI metainformation from DOI's provider
+ * 
+ * @param {angular.$http} $http Angular HTTP client module
+ */
+function DoiService($http, $q) {
+  function setAlternativeIdentifier(doiObject, output) {
+    function internalFormatter(ids) {
+      return ids.map(function(id) { return { identifier: id }});
+    }
+
+    var outputIds = [];
+
+    if (doiObject.ISSN)
+      outputIds = outputIds.concat(internalFormatter(doiObject.ISSN));
+
+    output.related_identifiers = outputIds;
+  }
+
+  function getLanguage(lang) {
+    return $http.get('/api/language', { params: { q: lang } })
+      .then(function(response) {
+        return response.data.suggestions[0].code;
+      })
+      .catch(function() {
+        return lang;
+      })
+  }
+
+  function getAuthors(doiObject) {
+    
+  }
+
+  /**
+   * Search for DOI in dx.doi.org
+   * 
+   * @example
+   * DoiService.getDoiFromDx('10.1016/j.jastp.2015.06.003')
+   *   .then(doiObject => {
+   *      console.log(doiObject);
+   *    })
+   * 
+   * @param {string} doi DOI to search
+   * @returns {Promise<any>}
+   */
+  this.getDoiFromDx = function(doi) {
+    var reqObj = {
+      method: 'GET',
+      url: 'http://dx.doi.org/' + doi,
+      headers: {
+        'Accept': 'application/citeproc+json',
+      }
+    }
+
+    var defer = $q.defer();
+
+    $http(reqObj)
+      .then(function(response) {
+        console.log(response);
+        // Reject promise when error occurred
+        if (angular.isString(response.data) || response.status !== 200) {
+          throw response;
+        }
+
+        var outputObject = {};
+        outputObject.title = response.data.title;
+
+        // Format output to well-known zenodo model
+        outputObject.creators = response.data.author.map(function(author) {
+          var name = author.literal || (author.family + ',' + author.given);
+          var getAffiliation = function() {
+            if (Array.isArray(author.getAffiliation) && author.affiliation.length !== 0) {
+              return author.affiliation[0];
+            }
+
+            if (angular.isString(author.affiliation) && author.affiliation.length !== 0)
+              return author.affiliation;
+
+            return 'Unknown';
+          }
+
+          return { name: name, affiliation: getAffiliation(), orcid: author.orcid }
+        });
+
+        if (response.data.created) {
+          var createdDatetime = response.data.created['date-time'];
+          // TODO: Change this validator
+          outputObject.publication_date = createdDatetime.substr(0, createdDatetime.indexOf('T'));
+        }
+
+        setAlternativeIdentifier(response.data, outputObject);
+
+        return getLanguage(response.data.language)
+          .then(function(language) {
+            console.log(language);
+            outputObject.language = language;
+            return defer.resolve(outputObject)
+          });
+      })
+      .catch(function(error) {
+        if (error.status === 404)
+          return defer.reject(new Error('DOI not found'));
+        return defer.reject(new Error('Could not request for DOI'));
+      });
+    
+    return defer.promise;
+  }
+}
+
+// Inject dependencies into DoiService
+DoiService.$inject = ['$http', '$q'];
+
+function DoiSearcherController($scope, DoiService, debounce) {
+  var self = this;
+  this.isLoading = false;
+  this.hasReqError = null;
+  // Set debounce function to avoid overhead
+  this.onChangeTrigger = onChangeTrigger
+
+  /**
+   * Dispatches DOI search and fill model results
+   * @param {angular.$event} $event Internal angular event
+   * @param {any} model Zenodo Model
+   */
+  function onChangeTrigger($event, model) {
+    console.log("Previous", Object.assign({}, model));
+    // Set component to loading state
+    self.isLoading = true;
+    self.hasReqError = null;
+
+    var doi = model.doi;
+
+    console.log($scope);
+
+    if (!doi)
+      return;
+    
+    DoiService.getDoiFromDx(doi)
+      .then(function(doiFound) {
+        // Merge found doi with model scope
+        Object.assign(model, doiFound);
+
+        console.log('After', model);
+
+        $scope.formCtrl.$setDirty()
+        $scope.formCtrl.$setSubmitted()
+        $scope.$broadcast('schemaFormValidate');
+      })
+      .catch(function(err) {
+        self.hasReqError = err.message;
+      })
+      .finally(function() {
+        // Finalize component loading state
+        self.isLoading = false;
+      });
+  }
+}
+// Inject angular dependencies
+DoiSearcherController.$inject = ['$scope', 'DoiService', 'debounce'];
+
+/**
+ * Configure angular module to inject doisearcher component
+ * 
+ * @param {any} schemaFormDecoratorsProvider SchemaForm Provider
+ */
+function configModule(schemaFormDecoratorsProvider) {
+  schemaFormDecoratorsProvider.defineAddOn(
+    'bootstrapDecorator',
+    'doisearcher',
+    '/static/templates/zenodo_deposit/doisearcher.html'
+  );
+}
+// Inject angular dependencies
+configModule.$inject = ['schemaFormDecoratorsProvider'];
+
 
 angular.module('schemaForm')
-  .controller('invenioDynamicSelectController', invenioDynamicSelectController);
+  .config(configModule)
+  .controller('invenioDynamicSelectController', invenioDynamicSelectController)
+  .controller('DoiSearcherController', DoiSearcherController)
+  // Debounce function to avoid overhead
+  .factory('debounce', ['$timeout','$q', function debounce($timeout, $q) {
+    return function wrapDebounce(func, wait, immediate) {
+      var timeout;
+      // Create a deferred object that will be resolved when we need to
+      // actually call the func
+      var deferred = $q.defer();
+      return function() {
+        var context = this, args = arguments;
+        var later = function() {
+          timeout = null;
+          if(!immediate) {
+            deferred.resolve(func.apply(context, args));
+            deferred = $q.defer();
+          }
+        };
+        var callNow = immediate && !timeout;
+        if ( timeout ) {
+          $timeout.cancel(timeout);
+        }
+        timeout = $timeout(later, wait);
+        if (callNow) {
+          deferred.resolve(func.apply(context,args));
+          deferred = $q.defer();
+        }
+        return deferred.promise;
+      };
+    };
+  }])
+  .service('DoiService', DoiService);

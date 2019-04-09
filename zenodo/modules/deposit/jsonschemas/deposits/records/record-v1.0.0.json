@@ -569,7 +569,8 @@
     },
     "doi": {
       "description": "Digital Object Identifier (DOI).",
-      "type": "string"
+      "type": "string",
+      "format": "doisearcher"
     },
     "embargo_date": {
       "description": "Embargo date of record (ISO8601 formatted date).",

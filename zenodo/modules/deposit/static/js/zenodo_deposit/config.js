@@ -29,7 +29,7 @@ function configZenodoDeposit($provide, decoratorsProvider, $windowProvider) {
   decoratorsProvider.defineAddOn(
     'bootstrapDecorator',
     'grantselect',
-    '/static/templates/zenodo_deposit/grantselect.html")}}'
+    '/static/templates/zenodo_deposit/grantselect.html'
   );
   decoratorsProvider.defineAddOn(
     'bootstrapDecorator',
