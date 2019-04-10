@@ -1,17 +1,42 @@
 [
   {
-      "ranking": 10000,
-      "curation_policy": "See https://zenodo.org/policies",
-      "id": "zenodo",
-      "title": "Zenodo",
-      "owner_email": "info@zenodo.org"
+    "ranking": 10000,
+    "curation_policy": "See http://www.earthobservations.org/activity.php?id=128",
+    "id": "geo_bon",
+    "title": "GEO BON",
+    "owner_email": "geokh@dpi.inpe.br",
+    "logo": "data/community-logos/geo_bon.png"
   },
   {
-      "ranking": 20000,
-      "curation_policy": "Uploads must have been fully or partially funded by the European Commission.",
-      "id": "ecfunded",
-      "title": "European Commission Funded Research (OpenAIRE)",
-      "owner_email": "info@zenodo.org",
-      "logo": "data/community-logos/ecfunded.jpg"
+    "ranking": 10000,
+    "curation_policy": "See http://www.earthobservations.org/activity.php?id=129",
+    "id": "geoglam",
+    "title": "GEOGLAM",
+    "owner_email": "geokh@dpi.inpe.br",
+    "logo": "data/community-logos/geoglam.png"
+  },
+  {
+    "ranking": 10000,
+    "curation_policy": "See http://www.earthobservations.org/activity.php?id=130",
+    "id": "gfoi",
+    "title": "Global Forest Observation Initiative (GFOI)",
+    "owner_email": "geokh@dpi.inpe.br",
+    "logo": "data/community-logos/gfoi.png"
+  },
+  {
+    "ranking": 10000,
+    "curation_policy": "See http://www.earthobservations.org/activity.php?id=131",
+    "id": "gos4m",
+    "title": "Global Observation System for Mercury (GOS4M)",
+    "owner_email": "geokh@dpi.inpe.br",
+    "logo": "data/community-logos/gos4m.png"
+  },
+  {
+    "ranking": 20000,
+    "curation_policy": "See http://www.earthobservations.org/activity.php?id=119",
+    "id": "geo_human_planet_initiative",
+    "title": "Geo Human Planet Initiative: Spatial Modeling of Impact, Exposure and Access to Resources",
+    "owner_email": "geokh@dpi.inpe.br",
+    "logo": "data/community-logos/geo_human_planet_initiative.png"
   }
 ]
