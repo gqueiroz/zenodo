@@ -30,8 +30,8 @@ body.cover-page {
   color: #fff;
   text-align: center;
   @include gradient-horizontal(
-    $start-color: $color1,
-    $end-color: $color1-gradient);
+    $start-color: #143240,
+    $end-color: #87aee4);
 }
 
 body.cover-page {

@@ -1,6 +1,6 @@
 [
     {
-        "email": "geokh@dpi.inpe.br",
+        "email": "info@zenodo.org",
         "password": "123456",
         "access": [
             ["allow", "admin-access"],
