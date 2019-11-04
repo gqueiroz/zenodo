@@ -1260,15 +1260,15 @@ COMMUNITIES_REQUEST_EMAIL_SENDER = SUPPORT_EMAIL
 # Theme
 # =====
 #: Default site name.
-THEME_SITENAME = _("Zenodo")
+THEME_SITENAME = _("GEO Knowledge Hub")
 #: Default site URL (used only when not in a context - e.g. like celery tasks).
 THEME_SITEURL = "http://localhost:5000"
 #: Endpoint for breadcrumb root.
 THEME_BREADCRUMB_ROOT_ENDPOINT = 'zenodo_frontpage.index'
 #: Twitter handle.
-THEME_TWITTERHANDLE = "@zenodo_org"
+THEME_TWITTERHANDLE = "@geosec2025"
 #: Path to logo file.
-THEME_LOGO = "img/zenodo.svg"
+THEME_LOGO = "img/geo_knowledge_hub_logo.svg"
 #: Google Site Verification ids.
 THEME_GOOGLE_SITE_VERIFICATION = [
     "5fPGCLllnWrvFxH9QWI0l1TadV7byeEvfPcyK2VkS_s",

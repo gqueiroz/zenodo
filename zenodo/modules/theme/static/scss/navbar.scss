@@ -46,8 +46,10 @@
 }
 
 .navbar-default {
-  @include navbar-gradient();
+  //@include navbar-gradient();
   @include navbar-shadow();
+
+  background-color: #143240;
 
   // Header background image
   // .container {
